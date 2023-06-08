@@ -7,8 +7,8 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Users(Base):
-    __tablename__ = 'users'
+class User(Base):
+    __tablename__ = 'user'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     user_id = Column(Integer, primary_key=True)
@@ -19,33 +19,38 @@ class Users(Base):
     apellido = Column(String(250), nullable=False)
     fecha_de_registro = Column(String(250), nullable=False)
 
-class Posts(Base):
-    __tablename__ = 'posts'
+class Post(Base):
+    __tablename__ = 'post'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     post_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
+    user_id = Column(Integer, ForeignKey('user.user_id'))
     imagen = Column(String(250), nullable=False)
     descripción = Column(String(250), nullable=False)
     fecha_de_publicación = Column(String(250), nullable=False)
     ubicación = Column(String(250), nullable=False)
+    relationship(User)
 
     def to_dict(self):
         return {}
     
-class Comments(Base):
-    __tablename__='comments'
+class Comment(Base):
+    __tablename__='comment'
     comment_id = Column(Integer, primary_key=True)
-    user_id  = Column(Integer, ForeignKey('users.user_id'))
-    post_id = Column(Integer, ForeignKey('posts.post_id'))
+    user_id  = Column(Integer, ForeignKey('user.user_id'))
+    post_id = Column(Integer, ForeignKey('post.post_id'))
     texto = Column(String(250), nullable=False)
     fecha_de_comentario = Column(String(250), nullable=False)
+    relationship(User)
+    relationship(Post)
 
-class Likes(Base):
-    __tablename__='likes'
+class Like(Base):
+    __tablename__='like'
     like_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
-    post_id = Column(Integer, ForeignKey('posts.post_id'))
+    user_id = Column(Integer, ForeignKey('user.user_id'))
+    post_id = Column(Integer, ForeignKey('post.post_id'))
+    relationship(User)
+    relationship(Post)
 
 ## Draw from SQLAlchemy base
 try:
